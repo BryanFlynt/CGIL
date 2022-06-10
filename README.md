@@ -74,7 +74,7 @@ The program accepts 2 command line arguments or will defualt them if not provide
 make_random_targets <num_dim> <num_points>
 ```
 
-Here we will create 100 3D points and save to a file name "target.txt"
+Here we will create 1000 3D points and save to a file name "target.txt"
 ```console
 > ./make_random_targets 3 1000 > target.txt
 ```
