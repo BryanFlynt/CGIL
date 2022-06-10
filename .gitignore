@@ -1,32 +1,11 @@
-# Prerequisites
-*.d
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# Eclipse Project files
+.project
+.cproject
+.settings
 
-# Precompiled Headers
-*.gch
-*.pch
+# VSCode Files
+.vscode
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# My commonly used build diretory
+build
