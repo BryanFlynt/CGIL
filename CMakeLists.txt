@@ -141,7 +141,5 @@ endif()
 add_subdirectory(src)
 
 # Build Tests for Libraries
-include(CTest)
-if(CGIL_BUILD_TESTING)
-	add_subdirectory(test)
-endif()
+add_subdirectory(test)
+
