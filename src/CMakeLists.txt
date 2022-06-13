@@ -8,6 +8,12 @@
 # ========================================================
 #
 add_executable(make_random_sources make_random_sources.cpp)
+set_target_properties(make_random_sources       
+PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
 install(TARGETS make_random_sources DESTINATION "${MY_INSTALL_BINDIR}")
 
 #
@@ -16,6 +22,12 @@ install(TARGETS make_random_sources DESTINATION "${MY_INSTALL_BINDIR}")
 # ========================================================
 #
 add_executable(make_random_targets make_random_targets.cpp)
+set_target_properties(make_random_targets       
+PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
 install(TARGETS make_random_targets DESTINATION "${MY_INSTALL_BINDIR}")
 
 
@@ -25,6 +37,13 @@ install(TARGETS make_random_targets DESTINATION "${MY_INSTALL_BINDIR}")
 # ========================================================
 #
 add_executable(cgil2 cgil2.cpp)
+
+set_target_properties(cgil2       
+PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
 
 target_compile_options(cgil2 
         PUBLIC
@@ -50,6 +69,13 @@ install(TARGETS cgil2 DESTINATION "${MY_INSTALL_BINDIR}")
 # ========================================================
 #
 add_executable(cgil3 cgil3.cpp)
+
+set_target_properties(cgil3     
+PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
 
 target_compile_options(cgil3 
         PUBLIC

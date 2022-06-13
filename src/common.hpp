@@ -14,15 +14,14 @@
 #include <utility>
 #include <vector>
 
-
 namespace common {
 
 /// Print Coordinates to Console
 /**
  */
-template<typename T>
-void dump_line(const std::vector<T> xyz){
-    for(std::size_t n = 0; n < xyz.size(); ++n){
+template <typename T>
+void dump_line(const std::vector<T> xyz) {
+    for (std::size_t n = 0; n < xyz.size(); ++n) {
         std::cout << std::setw(15) << std::setprecision(8) << std::scientific << xyz[n] << " ";
     }
     std::cout << std::endl;
@@ -31,12 +30,26 @@ void dump_line(const std::vector<T> xyz){
 /// Print Coordinates + Variables to Console
 /**
  */
-template<typename T>
-void dump_line(const std::vector<T> xyz, const std::vector<T> val){
-    for(std::size_t n = 0; n < xyz.size(); ++n){
+template <typename T>
+void dump_line(const std::vector<T> xyz, const std::vector<T> val) {
+    for (std::size_t n = 0; n < xyz.size(); ++n) {
         std::cout << std::setw(15) << std::setprecision(8) << std::scientific << xyz[n] << " ";
     }
-    for(std::size_t n = 0; n < val.size(); ++n){
+    for (std::size_t n = 0; n < val.size(); ++n) {
+        std::cout << std::setw(15) << std::setprecision(8) << std::scientific << val[n] << " ";
+    }
+    std::cout << std::endl;
+}
+
+/// Print Coordinates + Variables to Console
+/**
+ */
+template <typename T, std::size_t N>
+void dump_line(const std::vector<T> xyz, const std::size_t nval, const std::array<T,N> val) {
+    for (std::size_t n = 0; n < xyz.size(); ++n) {
+        std::cout << std::setw(15) << std::setprecision(8) << std::scientific << xyz[n] << " ";
+    }
+    for (std::size_t n = 0; n < nval; ++n) {
         std::cout << std::setw(15) << std::setprecision(8) << std::scientific << val[n] << " ";
     }
     std::cout << std::endl;
@@ -77,26 +90,24 @@ void fill_variables(const std::vector<T, A>& xyz, std::vector<T, A>& var) {
 /// Class to act as std::arrayu with simple math
 /**
  * This class is a simple wrapper around std::array
- * with inefficient math functions added.  It would have 
+ * with inefficient math functions added.  It would have
  * been easier to add free math functions to std::array
- * but the GCAL code refuses to use them and complains. 
+ * but the GCAL code refuses to use them and complains.
  */
 template <typename T, std::size_t N>
 struct Array {
-    using self_type      = Array<T, N>;
-    using container_type = std::array<T, N>;
-    using size_type      = typename container_type::size_type;
-    using value_type     = typename container_type::value_type;
-    using reference     = typename container_type::reference;
+    using self_type       = Array<T, N>;
+    using container_type  = std::array<T, N>;
+    using size_type       = typename container_type::size_type;
+    using value_type      = typename container_type::value_type;
+    using reference       = typename container_type::reference;
     using const_reference = typename container_type::const_reference;
+    using iterator        = typename container_type::iterator;
+    using const_iterator  = typename container_type::const_iterator;
 
-    constexpr reference operator[](const size_type index) noexcept {
-        return array_[index];
-    }
+    constexpr reference operator[](const size_type index) noexcept { return array_[index]; }
 
-    constexpr const_reference operator[](const size_type index) const noexcept {
-        return array_[index];
-    }
+    constexpr const_reference operator[](const size_type index) const noexcept { return array_[index]; }
 
     constexpr self_type& operator+=(const_reference value) noexcept {
         for (size_type i = 0; i < N; ++i) {
@@ -154,47 +165,53 @@ struct Array {
         return *this;
     }
 
+    constexpr const_iterator cbegin() const noexcept {
+        return array_.cbegin();
+    }
+
+    constexpr const_iterator cend() const noexcept {
+        return array_.cend();
+    }
+
     constexpr size_type size() const noexcept { return array_.size(); }
 
     constexpr void fill(value_type const& v) noexcept { array_.fill(v); }
 
-
     container_type array_;
 };
 
-
 template <typename T, std::size_t N>
-Array<T,N> operator+(const Array<T,N>& lhs, const Array<T,N>& rhs){
-    Array<T,N> ans(lhs);
+Array<T, N> operator+(const Array<T, N>& lhs, const Array<T, N>& rhs) {
+    Array<T, N> ans(lhs);
     ans += rhs;
     return ans;
 }
 
 template <typename T, std::size_t N>
-Array<T,N> operator*(typename Array<T,N>::value_type const& lhs, const Array<T,N>& rhs){
-    Array<T,N> ans(rhs);
+Array<T, N> operator*(typename Array<T, N>::value_type const& lhs, const Array<T, N>& rhs) {
+    Array<T, N> ans(rhs);
     ans *= lhs;
     return ans;
 }
 
 template <typename T, std::size_t N>
-Array<T,N> operator*(const Array<T,N>& lhs, typename Array<T,N>::value_type const& rhs){
-    Array<T,N> ans(lhs);
+Array<T, N> operator*(const Array<T, N>& lhs, typename Array<T, N>::value_type const& rhs) {
+    Array<T, N> ans(lhs);
     ans *= rhs;
     return ans;
 }
 
 template <typename T, std::size_t N>
-Array<T,N> operator/(typename Array<T,N>::value_type const& lhs, const Array<T,N>& rhs){
-    Array<T,N> ans;
+Array<T, N> operator/(typename Array<T, N>::value_type const& lhs, const Array<T, N>& rhs) {
+    Array<T, N> ans;
     ans.fill(lhs);
     ans /= rhs;
     return ans;
 }
 
 template <typename T, std::size_t N>
-Array<T,N> operator/(const Array<T,N>& lhs, typename Array<T,N>::value_type const& rhs){
-    Array<T,N> ans(lhs);
+Array<T, N> operator/(const Array<T, N>& lhs, typename Array<T, N>::value_type const& rhs) {
+    Array<T, N> ans(lhs);
     ans /= rhs;
     return ans;
 }

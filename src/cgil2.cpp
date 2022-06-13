@@ -63,31 +63,23 @@ std::size_t read_source_file_2(const std::string& file_name, std::vector<point_t
         std::exit(EXIT_FAILURE);
     }
 
-    // Get size of File
-    file.seekg(0, std::ios::end);
-    std::streampos length = file.tellg();
-    file.seekg(0, std::ios::beg);
-
-    // Allocate std::vector as Buffer and read
-    std::vector<char> buffer(length);
-    file.read(buffer.data(), length);
-
-    // Create string stream
-    std::stringstream localStream;
-    localStream.rdbuf()->pubsetbuf(buffer.data(), length);
-
+    // Read
+    std::stringstream file_stream;
+    file_stream << file.rdbuf();
+    file.close();
+    
     // Parse Header
     std::size_t num_dim;
     std::size_t num_points;
     std::size_t num_variables;
-    localStream >> num_dim;
+    file_stream >> num_dim;
     if (2 != num_dim) {
         std::cerr << "ERROR: Wrong Number of Dimensions In File" << std::endl;
         std::cerr << "Expected 2 but got " << num_dim << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    localStream >> num_points;
-    localStream >> num_variables;
+    file_stream >> num_points;
+    file_stream >> num_variables;
     if (num_variables > MAXVAR) {
         std::cerr << "ERROR: Cannot Support More than " << MAXVAR << " Variables" << std::endl;
         std::cerr << "Requested " << num_variables << " Variables" << std::endl;
@@ -100,11 +92,11 @@ std::size_t read_source_file_2(const std::string& file_name, std::vector<point_t
     xyz.resize(num_points);
     var.resize(num_points);
     for (std::size_t i = 0; i < num_points; ++i) {
-        localStream >> x;
-        localStream >> y;
+        file_stream >> x;
+        file_stream >> y;
         xyz[i] = point_type(x, y);
         for (std::size_t j = 0; j < num_variables; ++j) {
-            localStream >> var[i][j];
+            file_stream >> var[i][j];
         }
     }
     return num_variables;
@@ -121,36 +113,28 @@ void read_target_file_2(const std::string& file_name, std::vector<point_type>& x
         std::exit(EXIT_FAILURE);
     }
 
-    // Get size of File
-    file.seekg(0, std::ios::end);
-    std::streampos length = file.tellg();
-    file.seekg(0, std::ios::beg);
-
-    // Allocate std::vector as Buffer and read
-    std::vector<char> buffer(length);
-    file.read(buffer.data(), length);
-
-    // Create string stream
-    std::stringstream localStream;
-    localStream.rdbuf()->pubsetbuf(buffer.data(), length);
-
+    // Read
+    std::stringstream file_stream;
+    file_stream << file.rdbuf();
+    file.close();
+    
     // Parse Header
     std::size_t num_dim;
     std::size_t num_points;
-    localStream >> num_dim;
+    file_stream >> num_dim;
     if (2 != num_dim) {
         std::cerr << "ERROR: Wrong Number of Dimensions In File" << std::endl;
         std::cerr << "Expected 2 but got " << num_dim << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    localStream >> num_points;
+    file_stream >> num_points;
 
     // Parse Data
     double x, y;
     xyz.resize(num_points);
     for (std::size_t i = 0; i < num_points; ++i) {
-        localStream >> x;
-        localStream >> y;
+        file_stream >> x;
+        file_stream >> y;
         xyz[i] = point_type(x, y);
     }
 }
